@@ -1,12 +1,23 @@
 #include "protocol.h"
 
-Protocol::Protocol(QObject *parent,string msg)
+Protocol::Protocol(QObject *parent,string msg):
+    CC_SIGNUP("2"),
+    CC_SIGNIN ("3"),
+    CC_MESSAGE("4"),
+    CC_SIGNOUT("5"),
+    CC_SUCCESS("1"),
+    CC_FAIL("9"),
+    p_SERVERPORT("1111"),
+    p_ENCOODING("utf-8"),
+    p_ENDOFDATA ("@@"),
+    p_SPLITER("#"),
+    success("1@@"),
+    fail("0@@")
 {
    recmessage=msg;
 }
 Protocol::~Protocol()
 {
-
 }
 char Protocol::handle()
 {
@@ -14,7 +25,7 @@ char Protocol::handle()
     int possition=0;
     QString sourcemsg;
     sourcemsg=QString::fromStdString(recmessage);
-    if(sourcemsg.startsWith(CC_SIGNUP))   //注册
+    if(sourcemsg.startsWith(CC_SIGNUP))    //注册
     {
         sourcemsg=sourcemsg.remove(0,CC_SIGNUP.length());
         possition=sourcemsg.indexOf(p_SPLITER,0);

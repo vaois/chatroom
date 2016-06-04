@@ -10,18 +10,18 @@
 #include <QTcpServer>
 using namespace std;
 class Server;
-class Tcpclientsocket:public QTcpSocket
+class Tcpclientsocket:public QObject
 {
     Q_OBJECT
 public:
-     //Tcpclientsocket(QObject *parent=0);
-    Tcpclientsocket(Server *, QObject *parent=0);
+    Tcpclientsocket(Server *, QTcpSocket *, QObject *parent=0);
 private:
     Server *sourcelist;
-    const QString CC_MESSAGE ="4";
-    QString success="1@@";
-    QString fail="0@@";
-    const QString p_SPLITER  ="#";
+    QTcpSocket *clientsocket;
+    const QString CC_MESSAGE;
+    const QString success;
+    const QString fail;
+    const QString p_SPLITER;
 signals:
     void upDateServerShow(QString,QString);
     void upDateClientShow();

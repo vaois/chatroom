@@ -17,23 +17,21 @@ class Server:public QTcpServer
 public:
     Server(QObject *parent=0);
     ~Server();
-    void incomingConnection(int socketDescriptor);
-    friend class Tcpclientsocket;
+    friend class Tcpclientsocket;       //声明Tcpclientsocket为友元函数
 private:
     int socketDesc;
     Thread *thread;
-    //bool enableconnect=1;
-    //ClientMessaga *clientmessage;
-    //QTcpSocket *clientsocket;
+    const int port;
     QList<QTcpSocket *> clientsocketlist;
     QList<QString> clientnamelist;
-    QList<QString> clientdatabase;
+    QList<QString> clientdatabase;     //存储注册用户的信息，形式为name+“#”+password
     QMap<QString,QTcpSocket *> namesocket;
     QList<QString> allnospeakname;
 signals:
     void sigUpDateServerShow(QString,QString);
     void sigUpdateClientShow(QList<QString>,QList<QString>);
 public slots:
+    void slotAcceptConnection();
     void slotUpDateServerShow(QString,QString);
     void slotUpdateClientShow();
     void slotAllowSpeak(QString);

@@ -5,8 +5,6 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     Dialog w;
-    w.show();
-    //Nospeak s;
-    //s.show();
+    w.show();         //显示界面
     return a.exec();
 }

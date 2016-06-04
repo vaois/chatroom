@@ -6,12 +6,12 @@ Dialog::Dialog(QWidget *parent) :
     ui(new Ui::Dialog)
 {
     ui->setupUi(this);
-    connect(ui->open,SIGNAL(clicked()),this,SLOT(on_pushButton_clicked()));
-    connect(ui->close,SIGNAL(clicked()),this,SLOT(slotclose()));
-    connect(ui->clear,SIGNAL(clicked()),this,SLOT(slotclear()));
-    connect(ui->allowspeak,SIGNAL(clicked()),this,SLOT(slotAllowSpeak()));
-    connect(ui->nospeak,SIGNAL(clicked()),this,SLOT(slotNoSpeak()));
-    connect(ui->forcequit,SIGNAL(clicked()),this,SLOT(slotQuit()));
+    connect(ui->open,SIGNAL(clicked()),this,SLOT(slotOpen()));   //开启服务器
+    connect(ui->close,SIGNAL(clicked()),this,SLOT(slotClose()));              //关闭服务器
+    connect(ui->clear,SIGNAL(clicked()),this,SLOT(slotClear()));              //清空聊天内容
+    connect(ui->allowspeak,SIGNAL(clicked()),this,SLOT(slotAllowSpeak()));    //解禁言
+    connect(ui->nospeak,SIGNAL(clicked()),this,SLOT(slotNoSpeak()));          //禁言
+    connect(ui->forcequit,SIGNAL(clicked()),this,SLOT(slotQuit()));           //强制退出
 }
 
 Dialog::~Dialog()
@@ -36,29 +36,27 @@ void Dialog::slotAllowSpeak()
     ui->cotent->clear();
     emit sigAllowSpeak(str);
 }
-void Dialog::slotclose()
+void Dialog::slotClose()
 {
-    //~Server();
     delete server;
     ui->serverstatus->setText("服务器：关闭");
     ui->open->setEnabled(true);
     ui->close->setEnabled(false);
     ui->clientmessage->clear();
 }
-void Dialog::on_pushButton_clicked()
+void Dialog::slotOpen()
 {
     server=new Server();
-    server->listen(QHostAddress::Any,port);
-    connect(this,SIGNAL(sigAllowSpeak(QString)),server,SLOT(slotAllowSpeak(QString)));
-    connect(this,SIGNAL(sigNospeak(QString)),server,SLOT(slotNoSpeak(QString)));
-    connect(this,SIGNAL(sigQuit(QString)),server,SLOT(slotQuit(QString)));
-    connect(server,SIGNAL(sigUpDateServerShow(QString,QString)),this,SLOT(slotUpDateServerShow(QString,QString)));
-    connect(server,SIGNAL(sigUpdateClientShow(QList<QString>,QList<QString>)),this,SLOT(slotUpdateClientShow(QList<QString>,QList<QString>)));
+    connect(this,SIGNAL(sigAllowSpeak(QString)),server,SLOT(slotAllowSpeak(QString)));  //解禁言时对server对象的客户信息进行更新
+    connect(this,SIGNAL(sigNospeak(QString)),server,SLOT(slotNoSpeak(QString)));        //禁言时对server对象的客户信息进行更新
+    connect(this,SIGNAL(sigQuit(QString)),server,SLOT(slotQuit(QString)));              //强制退出时对server对象的客户信息进行更新
+    connect(server,SIGNAL(sigUpDateServerShow(QString,QString)),this,SLOT(slotUpDateServerShow(QString,QString)));  //server对象里的聊天内容有更新时，对ui界面的聊天框内容更新
+    connect(server,SIGNAL(sigUpdateClientShow(QList<QString>,QList<QString>)),this,SLOT(slotUpdateClientShow(QList<QString>,QList<QString>)));  //server对象里的客户信息有更新时，对ui的客户信息内容进行显示更新
     ui->serverstatus->setText("服务器：开启");
     ui->open->setEnabled(false);
     ui->close->setEnabled(true);
 }
-void Dialog::slotclear()
+void Dialog::slotClear()
 {
      ui->chatmessage->clear();
 }
@@ -83,9 +81,4 @@ void Dialog::slotUpdateClientShow(QList<QString> clientnamelist,QList<QString> a
          QString item =allnospeak.at(i);
          ui->clientmessage->addItem(item);
     }
-}
-
-void Dialog::on_open_clicked()
-{
-
 }

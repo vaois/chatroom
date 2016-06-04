@@ -23,7 +23,6 @@ private:
    QString fail="0@@";
 public slots:
 signals:
-   //void cancelthread();
    void sigReback(QString);
    void sigSignUp(QString,QString);
    void sigSignIn(QString,QString);

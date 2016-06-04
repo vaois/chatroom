@@ -19,20 +19,17 @@ signals:
     void sigAllowSpeak(QString);
     void sigQuit(QString);
 public slots:
-    void on_pushButton_clicked();
-    void slotclose();
-    void slotclear();
+    void slotOpen();
+    void slotClose();
+    void slotClear();
     void slotQuit();
     void slotNoSpeak();
     void slotAllowSpeak();
     void slotUpDateServerShow(QString,QString);
     void slotUpdateClientShow(QList<QString>,QList<QString>);
-private slots:
-    void on_open_clicked();
 
 private:
     Ui::Dialog *ui;
-    int port=1111;
     Server *server;
 };
 
